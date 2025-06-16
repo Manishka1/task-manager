@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import AppRouter from './AppRouter';
 import { store } from './app/store';
-import theme from './Theme';
+import theme from './theme';
 import './index.css';
 
 const rootEl = document.getElementById('root');
