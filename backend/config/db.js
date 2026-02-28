@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const uri = process.env.MONGO_URI;
+
+// Set the strictQuery option globally
+mongoose.set('strictQuery', true);
+
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -13,3 +17,4 @@ mongoose.connect(uri, {
 });
 
 module.exports = mongoose;
+ 

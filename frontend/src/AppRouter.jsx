@@ -9,6 +9,7 @@ import UsersList   from './components/UsersList';
 import Navbar      from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import NotFound    from './components/NotFound';
+import TaskPieChart from './components/TaskPieChart';
 
 export default function AppRouter(){
   return (
@@ -18,6 +19,8 @@ export default function AppRouter(){
         {/* Public */}
         <Route path="/login"    component={Login}/>
         <Route path="/register" component={Register}/>
+        <Route path="/pie-chart" component={TaskPieChart}/>
+        
 
         {/* Private */}
         <ProtectedRoute exact path="/"            component={TaskList}/>

@@ -9,21 +9,21 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   createTask,
-  updateTask,
-  fetchTask,
-  deleteTask
+  fetchTask
 } from '../features/tasks/tasksSlice';
 import { fetchUsers } from '../features/users/usersSlice';
 import { useHistory, useParams } from 'react-router-dom';
+//import { createTask, fetchTasks } from '../features/tasks/tasksSlice';
+
 
 export default function TaskForm() {
   const dispatch = useDispatch();
-  const history  = useHistory();
-  const { id }   = useParams();
-  const isEdit   = Boolean(id);
+  const history = useHistory();
+  const { id } = useParams();
+  const isEdit = Boolean(id);
 
   const { task, error } = useSelector(s => s.tasks);
-  const { list: users } = useSelector(s => s.users);
+  const users = useSelector(s => s.users.list);
 
   const [form, setForm] = useState({
     title: '',
@@ -35,13 +35,11 @@ export default function TaskForm() {
     documents: []
   });
 
-  // load users + (if editing) existing task
   useEffect(() => {
     dispatch(fetchUsers());
     if (isEdit) dispatch(fetchTask(id));
   }, [dispatch, id, isEdit]);
 
-  // when the task arrives, prefill
   useEffect(() => {
     if (isEdit && task) {
       setForm({
@@ -127,7 +125,7 @@ export default function TaskForm() {
               label="Priority" name="priority"
               value={form.priority} onChange={handleChange}
             >
-              {[1,2,3,4,5].map(n =>
+              {[1, 2, 3, 4, 5].map(n =>
                 <MenuItem key={n} value={n}>{n}</MenuItem>
               )}
             </Select>
@@ -139,9 +137,10 @@ export default function TaskForm() {
               label="Assign To" name="assignedTo"
               value={form.assignedTo} onChange={handleChange}
             >
-              {users.map(u =>
-                <MenuItem key={u._id} value={u._id}>{u.email}</MenuItem>
-              )}
+              <MenuItem value="">Select User</MenuItem>
+              {users.map(user => (
+                <MenuItem key={user._id} value={user.email}>{user.email}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -160,7 +159,7 @@ export default function TaskForm() {
           <Button
             variant="outlined"
             component="label"
-            sx={{ mt:2 }}
+            sx={{ mt: 2 }}
           >
             Upload PDFs
             <input
@@ -179,7 +178,7 @@ export default function TaskForm() {
           }
 
           <Box mt={3} display="flex" justifyContent="space-between">
-            <Button onClick={()=>history.push('/')} color="inherit">
+            <Button onClick={() => history.push('/')} color="inherit">
               Cancel
             </Button>
             <Button

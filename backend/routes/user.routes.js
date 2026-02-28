@@ -1,9 +1,18 @@
-const router = require('express').Router();
-const { verifyToken, isAdmin } = require('../middleware/authJwt');
-const ctrl = require('../controllers/user.controller');
+// routes/user.routes.js
 
-router.use(verifyToken, isAdmin);
-router.get('/',    ctrl.getAll);
-router.delete('/:id', ctrl.delete);
+const express = require('express');
+const verifyToken = require('../middleware/authJwt');
+const adminMiddleware = require('../middleware/adminMiddleware');
+const userController = require('../controllers/user.controller');
+
+const router = express.Router();
+
+// Only admins can access these routes
+router.use(verifyToken, adminMiddleware);
+
+// Routes
+router.get('/', userController.getAllUsers);
+router.delete('/:id', userController.delete);
 
 module.exports = router;
+

@@ -1,13 +1,25 @@
-const router = require('express').Router();
-const { verifyToken }        = require('../middleware/authJwt');
-const ctrl                  = require('../controllers/task.controller');
+const express = require('express');
+const router = express.Router();
+const taskController = require('../controllers/task.controller');
+const { verifyToken } = require('../middleware/verifyToken');
+const  adminMiddleware  = require('../middleware/adminMiddleware');
+const  checkOwnershipOrAdmin  = require('../middleware/ownershipMiddleware');
 
+// ✅ This ensures all task routes are protected
 router.use(verifyToken);
-router.post('/',    ctrl.create);
-router.get('/',     ctrl.findAll);
-router.get('/:id',  ctrl.findOne);
-router.put('/:id',  ctrl.update);
-router.delete('/:id', ctrl.delete);
-router.get('/doc/:filename', ctrl.downloadDoc);
+
+// Admin can create
+router.post('/', adminMiddleware, taskController.create);
+
+// All users see filtered tasks
+router.get('/', taskController.findAll);
+
+// Assigned or admin
+router.get('/:id', checkOwnershipOrAdmin, taskController.getTaskById);
+router.put('/:id', checkOwnershipOrAdmin, taskController.update);
+router.delete('/:id', adminMiddleware, taskController.delete);
+router.get('/doc/:filename', taskController.downloadDoc);
 
 module.exports = router;
+
+
