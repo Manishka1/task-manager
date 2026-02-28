@@ -1,72 +1,173 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../api/axiosInstance';
 
-// Fetch task statistics action
-export const fetchTaskStats = createAsyncThunk('tasks/fetchTaskStats', async () => {
-  const response = await axios.get('/api/tasks/stats'); // Adjust endpoint as needed
-  return response.data;
-});
+/* =========================
+   THUNKS
+========================= */
 
-// Existing async actions
-export const fetchTask = createAsyncThunk('tasks/fetchTask', async (taskId) => {
-  const response = await axios.get(`/api/tasks/${taskId}`);
-  return response.data.task;
-});
+// Fetch all tasks (with filters + pagination)
+export const fetchTasks = createAsyncThunk(
+  'tasks/fetchTasks',
+  async (params, thunkAPI) => {
+    try {
+      const response = await axios.get('/tasks', { params });
+      return response.data.tasks;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
 
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
-  const response = await axios.get('/api/tasks');
-  return response.data.tasks;
-});
+// Fetch single task
+export const fetchTask = createAsyncThunk(
+  'tasks/fetchTask',
+  async (taskId, thunkAPI) => {
+    try {
+      const response = await axios.get(`/tasks/${taskId}`);
+      return response.data.task;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
 
-export const createTask = createAsyncThunk('tasks/createTask', async (taskData) => {
-  const response = await axios.post('/api/tasks', taskData);
-  return response.data.task;
-});
+// Create task
+export const createTask = createAsyncThunk(
+  'tasks/createTask',
+  async (taskData, thunkAPI) => {
+    try {
+      const response = await axios.post('/tasks', taskData);
+      return response.data.task;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
 
-export const deleteTask = createAsyncThunk('tasks/deleteTask', async (taskId) => {
-  await axios.delete(`/api/tasks/${taskId}`);
-  return taskId;
-});
+// Update task
+export const updateTask = createAsyncThunk(
+  'tasks/updateTask',
+  async ({ id, data }, thunkAPI) => {
+    try {
+      const response = await axios.put(`/tasks/${id}`, data);
+      return response.data.task;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
+// Delete task
+export const deleteTask = createAsyncThunk(
+  'tasks/deleteTask',
+  async (taskId, thunkAPI) => {
+    try {
+      await axios.delete(`/tasks/${taskId}`);
+      return taskId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
+// Fetch statistics
+export const fetchTaskStats = createAsyncThunk(
+  'tasks/fetchTaskStats',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get('/tasks/stats');
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
+/* =========================
+   SLICE
+========================= */
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {
     tasks: [],
     task: null,
+    stats: null,
+    loading: false,
     error: null,
-    stats: null, // For storing stats
   },
+  reducers: {},
   extraReducers: (builder) => {
     builder
+
+      /* ===== FETCH TASKS ===== */
+      .addCase(fetchTasks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchTasks.fulfilled, (state, action) => {
+        state.loading = false;
         state.tasks = action.payload;
       })
       .addCase(fetchTasks.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.loading = false;
+        state.error = action.payload;
       })
-      .addCase(createTask.fulfilled, (state, action) => {
-        state.tasks.push(action.payload);
-      })
-      .addCase(createTask.rejected, (state, action) => {
-        state.error = action.error.message;
-      })
+
+      /* ===== FETCH SINGLE TASK ===== */
       .addCase(fetchTask.fulfilled, (state, action) => {
         state.task = action.payload;
       })
       .addCase(fetchTask.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.payload;
       })
+
+      /* ===== CREATE ===== */
+      .addCase(createTask.fulfilled, (state, action) => {
+        state.tasks.push(action.payload);
+      })
+      .addCase(createTask.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      /* ===== UPDATE ===== */
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.tasks = state.tasks.map((task) =>
+          task._id === action.payload._id ? action.payload : task
+        );
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      /* ===== DELETE ===== */
       .addCase(deleteTask.fulfilled, (state, action) => {
-        state.tasks = state.tasks.filter(task => task._id !== action.payload);
+        state.tasks = state.tasks.filter(
+          (task) => task._id !== action.payload
+        );
       })
       .addCase(deleteTask.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.payload;
       })
+
+      /* ===== STATS ===== */
       .addCase(fetchTaskStats.fulfilled, (state, action) => {
         state.stats = action.payload;
       })
       .addCase(fetchTaskStats.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.payload;
       });
   },
 });
