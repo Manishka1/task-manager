@@ -13,7 +13,7 @@ export default function Navbar() {
 
   useEffect(() => {
   if (user) dispatch(fetchTaskStats());
-  }, [dispatch, user]);
+}, [dispatch, user]);
 
   const handleLogout = () => {
     dispatch(logout());
