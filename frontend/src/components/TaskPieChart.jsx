@@ -16,7 +16,15 @@ const TaskPieChart = ({ data }) => {
 
   return (
     <div>
-      <Pie data={chartData} />
+      <div style={{ width: '400px', height: '400px', margin: '0 auto' }}>
+  <Pie 
+    data={chartData}
+    options={{
+      responsive: true,
+      maintainAspectRatio: false
+    }}
+  />
+</div>
     </div>
   );
 };
