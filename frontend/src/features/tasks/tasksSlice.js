@@ -11,7 +11,7 @@ export const fetchTasks = createAsyncThunk(
   async (params, thunkAPI) => {
     try {
       const response = await axios.get('/tasks', { params });
-      return response.data; // { tasks, total }
+      return response.data.tasks;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -26,7 +26,7 @@ export const fetchTask = createAsyncThunk(
   async (taskId, thunkAPI) => {
     try {
       const response = await axios.get(`/tasks/${taskId}`);
-      return response.data; // IMPORTANT FIX
+      return response.data.task;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -41,7 +41,7 @@ export const createTask = createAsyncThunk(
   async (taskData, thunkAPI) => {
     try {
       const response = await axios.post('/tasks', taskData);
-      return response.data; // IMPORTANT FIX
+      return response.data.task;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -56,7 +56,7 @@ export const updateTask = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     try {
       const response = await axios.put(`/tasks/${id}`, data);
-      return response.data; // IMPORTANT FIX
+      return response.data.task;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -80,6 +80,21 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
+// Fetch statistics
+export const fetchTaskStats = createAsyncThunk(
+  'tasks/fetchTaskStats',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get('/tasks/stats');
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
 /* =========================
    SLICE
 ========================= */
@@ -89,7 +104,7 @@ const tasksSlice = createSlice({
   initialState: {
     tasks: [],
     task: null,
-    total: 0,
+    stats: null,
     loading: false,
     error: null,
   },
@@ -97,22 +112,21 @@ const tasksSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      /* FETCH ALL */
+      /* ===== FETCH TASKS ===== */
       .addCase(fetchTasks.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.loading = false;
-        state.tasks = action.payload.tasks;
-        state.total = action.payload.total;
+        state.tasks = action.payload;
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      /* FETCH ONE */
+      /* ===== FETCH SINGLE TASK ===== */
       .addCase(fetchTask.fulfilled, (state, action) => {
         state.task = action.payload;
       })
@@ -120,7 +134,7 @@ const tasksSlice = createSlice({
         state.error = action.payload;
       })
 
-      /* CREATE */
+      /* ===== CREATE ===== */
       .addCase(createTask.fulfilled, (state, action) => {
         state.tasks.push(action.payload);
       })
@@ -128,7 +142,7 @@ const tasksSlice = createSlice({
         state.error = action.payload;
       })
 
-      /* UPDATE */
+      /* ===== UPDATE ===== */
       .addCase(updateTask.fulfilled, (state, action) => {
         state.tasks = state.tasks.map((task) =>
           task._id === action.payload._id ? action.payload : task
@@ -138,13 +152,21 @@ const tasksSlice = createSlice({
         state.error = action.payload;
       })
 
-      /* DELETE */
+      /* ===== DELETE ===== */
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.tasks = state.tasks.filter(
           (task) => task._id !== action.payload
         );
       })
       .addCase(deleteTask.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      /* ===== STATS ===== */
+      .addCase(fetchTaskStats.fulfilled, (state, action) => {
+        state.stats = action.payload;
+      })
+      .addCase(fetchTaskStats.rejected, (state, action) => {
         state.error = action.payload;
       });
   },
