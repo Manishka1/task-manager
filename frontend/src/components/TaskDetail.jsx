@@ -77,7 +77,7 @@ export default function TaskDetail() {
                       size="small"
                       onClick={() => {
                         window.open(
-                          `${process.env.REACT_APP_API_URL.replace('/api','')}/uploads/${doc.path.split('/').pop()}`,
+                          `${import.meta.env.VITE_API_URL.replace('/api','')}/uploads/${doc.path.split('/').pop()}`,
                           '_blank'
                         );
                       }}
