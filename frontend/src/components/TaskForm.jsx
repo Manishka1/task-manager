@@ -67,36 +67,23 @@ export default function TaskForm() {
     setForm(f => ({ ...f, documents: e.target.files }));
   };
 
-const handleSubmit = async e => {
-  e.preventDefault();
-
-  const data = new FormData();
-  Object.entries(form).forEach(([k, v]) => {
-    if (k === 'documents') {
-      Array.from(v).forEach(file => data.append('documents', file));
-    } else if (v !== null) {
-      data.append(k, v);
-    }
-  });
-
-  if (isEdit) {
-    await dispatch(updateTask({ id, data }));
-    history.push('/');
-  } else {
-    await dispatch(createTask(data));
-
-    // CLEAR FORM INSTEAD OF REDIRECT
-    setForm({
-      title: '',
-      description: '',
-      status: 'todo',
-      priority: 3,
-      dueDate: null,
-      assignedTo: '',
-      documents: []
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const data = new FormData();
+    Object.entries(form).forEach(([k, v]) => {
+      if (k === 'documents') {
+        Array.from(v).forEach(file => data.append('documents', file));
+      } else if (v !== null) {
+        data.append(k, v);
+      }
     });
-  }
-};
+    if (isEdit) {
+      await dispatch(updateTask({ id, data }));
+    } else {
+      await dispatch(createTask(data));
+    }
+    history.push('/');
+  };
 
   return (
     <Box p={3}>
