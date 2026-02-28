@@ -12,7 +12,7 @@ export default function Navbar() {
   const { stats } = useSelector((s) => s.tasks);
 
   useEffect(() => {
-    if (user) dispatch(fetchTaskStats());
+  if (user) dispatch(fetchTaskStats());
   }, [dispatch, user]);
 
   const handleLogout = () => {

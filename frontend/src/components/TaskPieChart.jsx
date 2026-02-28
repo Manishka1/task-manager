@@ -9,7 +9,7 @@ const TaskPieChart = ({ data }) => {
   const chartData = {
     labels: ['To Do', 'In Progress', 'Done'],
     datasets: [{
-      data: data || [10, 20, 30], // Replace with actual data
+      data: data || [10, 20, 30],
       backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
     }]
   };
