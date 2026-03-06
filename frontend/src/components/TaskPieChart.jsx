@@ -1,32 +1,62 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pie } from 'react-chartjs-2';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTasks } from '../features/tasks/tasksSlice';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Box, Typography, Paper } from '@mui/material';
 
-// Register required components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const TaskPieChart = ({ data }) => {
+export default function TaskPieChart() {
+  const dispatch = useDispatch();
+
+  const { tasks } = useSelector((state) => state.tasks);
+
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
+
+  const todoCount = tasks.filter((t) => t.status === 'todo').length;
+  const progressCount = tasks.filter((t) => t.status === 'in-progress').length;
+  const doneCount = tasks.filter((t) => t.status === 'done').length;
+
   const chartData = {
     labels: ['To Do', 'In Progress', 'Done'],
-    datasets: [{
-      data: data || [10, 20, 30],
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-    }]
+    datasets: [
+      {
+        label: 'Tasks',
+        data: [todoCount, progressCount, doneCount],
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#4CAF50'
+        ],
+        borderWidth: 1
+      }
+    ]
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
   };
 
   return (
-    <div>
-      <div style={{ width: '400px', height: '400px', margin: '0 auto' }}>
-  <Pie 
-    data={chartData}
-    options={{
-      responsive: true,
-      maintainAspectRatio: false
-    }}
-  />
-</div>
-    </div>
-  );
-};
+    <Box display="flex" justifyContent="center" mt={4}>
+      <Paper sx={{ p: 4, width: 450 }}>
+        <Typography variant="h6" textAlign="center" mb={2}>
+          Task Status Overview
+        </Typography>
 
-export default TaskPieChart;
+        <Box sx={{ height: 350 }}>
+          <Pie data={chartData} options={options} />
+        </Box>
+      </Paper>
+    </Box>
+  );
+}
