@@ -11,11 +11,12 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTask, updateTask } from '../features/tasks/tasksSlice';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 export default function TaskDetail() {
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const { id } = useParams();
 
   const { task } = useSelector(state => state.tasks);
@@ -35,11 +36,15 @@ export default function TaskDetail() {
 
   if (!task) return null;
 
-  const handleStatusUpdate = () => {
-    dispatch(updateTask({
+  const handleStatusUpdate = async () => {
+
+    await dispatch(updateTask({
       id: task._id,
       data: { status }
     }));
+
+    // Redirect back to task list after update
+    history.push('/');
   };
 
   return (
@@ -60,7 +65,9 @@ export default function TaskDetail() {
         </Typography>
 
         <Typography variant="body2" mb={2}>
-          Due Date: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '—'}
+          Due Date: {task.dueDate
+            ? new Date(task.dueDate).toLocaleDateString()
+            : '—'}
         </Typography>
 
         <Divider sx={{ my:2 }} />
