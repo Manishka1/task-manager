@@ -1,11 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../api/axiosInstance';
 
-/* =========================
-   THUNKS
-========================= */
-
-// Fetch all tasks (with filters + pagination)
+// Fetch all tasks
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
   async (params, thunkAPI) => {
@@ -26,7 +22,7 @@ export const fetchTask = createAsyncThunk(
   async (taskId, thunkAPI) => {
     try {
       const response = await axios.get(`/tasks/${taskId}`);
-      return response.data.task;
+      return response.data; // FIX
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -41,7 +37,7 @@ export const createTask = createAsyncThunk(
   async (taskData, thunkAPI) => {
     try {
       const response = await axios.post('/tasks', taskData);
-      return response.data.task;
+      return response.data; // FIX
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -56,7 +52,7 @@ export const updateTask = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     try {
       const response = await axios.put(`/tasks/${id}`, data);
-      return response.data.task;
+      return response.data; // FIX
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -80,94 +76,38 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
-// Fetch statistics
-export const fetchTaskStats = createAsyncThunk(
-  'tasks/fetchTaskStats',
-  async (_, thunkAPI) => {
-    try {
-      const response = await axios.get('/tasks/stats');
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || error.message
-      );
-    }
-  }
-);
-
-/* =========================
-   SLICE
-========================= */
-
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {
     tasks: [],
     task: null,
-    stats: null,
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-
-      /* ===== FETCH TASKS ===== */
-      .addCase(fetchTasks.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(fetchTasks.fulfilled, (state, action) => {
-        state.loading = false;
         state.tasks = action.payload;
       })
-      .addCase(fetchTasks.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
 
-      /* ===== FETCH SINGLE TASK ===== */
       .addCase(fetchTask.fulfilled, (state, action) => {
         state.task = action.payload;
       })
-      .addCase(fetchTask.rejected, (state, action) => {
-        state.error = action.payload;
-      })
 
-      /* ===== CREATE ===== */
       .addCase(createTask.fulfilled, (state, action) => {
         state.tasks.push(action.payload);
       })
-      .addCase(createTask.rejected, (state, action) => {
-        state.error = action.payload;
-      })
 
-      /* ===== UPDATE ===== */
       .addCase(updateTask.fulfilled, (state, action) => {
-        state.tasks = state.tasks.map((task) =>
-          task._id === action.payload._id ? action.payload : task
+        state.task = action.payload;
+        state.tasks = state.tasks.map((t) =>
+          t._id === action.payload._id ? action.payload : t
         );
       })
-      .addCase(updateTask.rejected, (state, action) => {
-        state.error = action.payload;
-      })
 
-      /* ===== DELETE ===== */
       .addCase(deleteTask.fulfilled, (state, action) => {
-        state.tasks = state.tasks.filter(
-          (task) => task._id !== action.payload
-        );
-      })
-      .addCase(deleteTask.rejected, (state, action) => {
-        state.error = action.payload;
-      })
-
-      /* ===== STATS ===== */
-      .addCase(fetchTaskStats.fulfilled, (state, action) => {
-        state.stats = action.payload;
-      })
-      .addCase(fetchTaskStats.rejected, (state, action) => {
-        state.error = action.payload;
+        state.tasks = state.tasks.filter((t) => t._id !== action.payload);
       });
   },
 });
