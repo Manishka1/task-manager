@@ -25,7 +25,7 @@ export default function Navbar() {
           sx={{ flexGrow: 1, cursor: 'pointer' }}
           onClick={() => history.push('/')}
         >
-          TaskManager
+          MiniTeam
         </Typography>
 
         {user && (
