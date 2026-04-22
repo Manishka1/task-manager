@@ -1,4 +1,4 @@
-import axios from './axiosInstance';
+import axiosInstance from './axiosInstance';
 
 export const fetchTasks  = params    => axios.get('/tasks', { params });
 export const fetchTask   = id        => axios.get(`/tasks/${id}`);
