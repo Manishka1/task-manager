@@ -5,6 +5,9 @@ import "swiper/css";
 import { Link } from "react-router-dom";
 import "swiper/css/navigation";
 import lottie from "lottie-web";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const CDN = "https://cdn.prod.website-files.com/690b5a39d269efd72421ec15";
 
