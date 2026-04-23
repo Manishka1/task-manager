@@ -18,6 +18,7 @@ import("lottie-web").then((mod) => {
   });
 });
 
+
 const CDN = "https://cdn.prod.website-files.com/690b5a39d269efd72421ec15";
 
 const NAV_LINKS = [
