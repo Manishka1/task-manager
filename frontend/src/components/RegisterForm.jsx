@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../features/auth/authSlice';
 import { useHistory } from 'react-router-dom';
 
+
 export default function RegisterForm() {
 
   const dispatch = useDispatch();
