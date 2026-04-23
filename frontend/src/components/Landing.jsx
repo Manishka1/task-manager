@@ -4,20 +4,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import { Link } from "react-router-dom";
 import "swiper/css/navigation";
-import("lottie-web").then((mod) => {
-  console.log("Lottie loaded"); // ✅ correct
-
-  const lottie = mod.default || mod;
-
-  const anim = lottie.loadAnimation({
-    container: ref.current,
-    renderer: "svg",
-    loop: true,
-    autoplay: true,
-    path: src,
-  });
-});
-
 
 const CDN = "https://cdn.prod.website-files.com/690b5a39d269efd72421ec15";
 
