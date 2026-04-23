@@ -4,6 +4,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import { Link } from "react-router-dom";
 import "swiper/css/navigation";
+import lottie from "lottie-web";
 
 const CDN = "https://cdn.prod.website-files.com/690b5a39d269efd72421ec15";
 
@@ -66,22 +67,28 @@ const FAQS = [
 // --- Lottie Loader ---
 function LottiePlayer({ src, className }) {
   const ref = useRef(null);
+
   useEffect(() => {
     if (!ref.current) return;
-    let anim;
-    import("lottie-web").then((mod) => {
-      const lottie = mod.default || mod;
-      anim = lottie.loadAnimation({
-        container: ref.current,
-        renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: src,
-      });
-    }).catch(() => {});
-    return () => anim && anim.destroy();
+
+    const anim = lottie.loadAnimation({
+      container: ref.current,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: src,
+    });
+
+    return () => anim.destroy();
   }, [src]);
-  return <div ref={ref} className={className} style={{ width: "100%", height: "100%" }} />;
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{ width: "100%", height: "100%" }}
+    />
+  );
 }
 
 // --- Scroll Reveal Hook ---
