@@ -6,26 +6,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../features/auth/authSlice';
 import { useHistory } from 'react-router-dom';
 
-
 export default function RegisterForm() {
 
   const dispatch = useDispatch();
   const history  = useHistory();
-  const { error, user, loading } = useSelector(s => s.auth);
+  const { error, status } = useSelector(s => s.auth);
 
   const [email, setEmail] = useState('');
-  const [pw, setPw] = useState('');
+  const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(register({ email, password: pw }));
-  };
 
-  useEffect(() => {
-    if (user) {
-      history.push('/login');
+    try {
+      await dispatch(register({ email, password })).unwrap();
+      setSuccess(true);
+      setTimeout(() => {
+        history.push('/login');
+      }, 1500);
+
+    } catch (err) {
+      console.log(err);
     }
-  }, [user, history]);
+  };
 
   const inputStyle = {
     input: { color: '#fff' },
@@ -64,7 +68,7 @@ export default function RegisterForm() {
         }}
       >
 
-        {/* LEFT — REGISTER */}
+      
         <Paper
           sx={{
             flex: 1,
@@ -84,7 +88,15 @@ export default function RegisterForm() {
             Start managing your team with MiniTeam
           </Typography>
 
+        
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+         
+          {success && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              Account created! Redirecting to login...
+            </Alert>
+          )}
 
           <Box component="form" onSubmit={handleSubmit}>
             <TextField
@@ -102,8 +114,8 @@ export default function RegisterForm() {
               type="password"
               fullWidth
               margin="normal"
-              value={pw}
-              onChange={(e) => setPw(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
               sx={inputStyle}
             />
@@ -111,7 +123,7 @@ export default function RegisterForm() {
             <Button
               type="submit"
               fullWidth
-              disabled={loading}
+              disabled={status === "loading"}
               sx={{
                 mt: 3,
                 py: 1.2,
@@ -124,12 +136,12 @@ export default function RegisterForm() {
                 }
               }}
             >
-              {loading ? 'Creating...' : 'Get Started'}
+              {status === "loading" ? 'Creating...' : 'Get Started'}
             </Button>
           </Box>
         </Paper>
 
-        {/* RIGHT — DEMO CARD */}
+       
         <Paper
           sx={{
             flex: 1,
@@ -151,7 +163,6 @@ export default function RegisterForm() {
             Try demo accounts to see how permissions change between Admin and User roles.
           </Typography>
 
-          {/* ADMIN */}
           <Box mb={2}>
             <Typography fontWeight={600} color="#ddbbf1">
               Admin
@@ -160,7 +171,6 @@ export default function RegisterForm() {
             <Typography fontSize={13}>123456</Typography>
           </Box>
 
-          {/* USER */}
           <Box mb={3}>
             <Typography fontWeight={600} color="#ddbbf1">
               User

@@ -1,4 +1,4 @@
-const express = require('express'); // must be before any app.use
+const express = require('express');
 const app = express();
 
 require('dotenv').config();
@@ -15,7 +15,6 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ✅ Route definitions
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);

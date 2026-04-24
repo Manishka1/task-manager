@@ -3,7 +3,7 @@ body {
   color: #1a1a1a;
 }
 
-/* MAIN LIGHTING BACKGROUND */
+
 .bg-lighting {
   position: absolute;
   inset: 0;
@@ -11,7 +11,6 @@ body {
   overflow: hidden;
 }
 
-/* BIG SOFT LIGHT BLOBS */
 .light-blob {
   position: absolute;
   width: 600px;
@@ -20,21 +19,18 @@ body {
   opacity: 0.6;
 }
 
-/* PINK LIGHT */
 .light-pink {
   background: radial-gradient(circle, #f9a8d4, transparent 70%);
   top: -100px;
   left: -100px;
 }
 
-/* PURPLE LIGHT */
 .light-purple {
   background: radial-gradient(circle, #c084fc, transparent 70%);
   bottom: -100px;
   right: -100px;
 }
 
-/* BEIGE SOFT SHAPE */
 .light-beige {
   background: radial-gradient(circle, #fde68a, transparent 70%);
   top: 40%;

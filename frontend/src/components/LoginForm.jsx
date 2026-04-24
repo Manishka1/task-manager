@@ -73,7 +73,7 @@ export default function LoginForm() {
             </button>
           </form>
 
-          {/* RIGHT SIDE (INFO PANEL) */}
+        
           <div style={infoCard}>
             <h3 style={infoTitle}>Explore Role-Based Access</h3>
             <p style={infoText}>
@@ -100,7 +100,7 @@ export default function LoginForm() {
   );
 }
 
-/* ---------------- STYLES ---------------- */
+//styles
 
 const container = {
   minHeight: "100vh",

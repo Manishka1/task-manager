@@ -42,8 +42,6 @@ export default function TaskDetail() {
       id: task._id,
       data: { status }
     }));
-
-    // Redirect back to task list after update
     history.push('/');
   };
 

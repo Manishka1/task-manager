@@ -1,9 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as authService from '../../api/authService';
 import {jwtDecode} from 'jwt-decode';
-// Import as a named import
 
-// Thunks
 export const login = createAsyncThunk(
   'auth/login',
   async ({ email, password }, thunkAPI) => {
@@ -29,13 +27,16 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {
-    logout(state) {
-      localStorage.removeItem('token');
-      state.user = null;
-      state.status = 'idle';
-      state.error = null;
-    },
+  logout(state) {
+    localStorage.removeItem('token');
+    state.user = null;
+    state.status = 'idle';
+    state.error = null;
   },
+  setUser(state, action) {
+    state.user = action.payload;
+  }
+},
   extraReducers: builder => {
     builder
       .addCase(login.pending, state => {
@@ -55,8 +56,9 @@ const authSlice = createSlice({
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(register.fulfilled, state => {
-        state.status = 'succeeded';
+      .addCase(register.fulfilled, (state, action) => {
+      state.status = 'succeeded';
+      state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
         state.status = 'failed';
@@ -65,9 +67,9 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setUser } = authSlice.actions;
 
-// Selector to get user role
 export const selectUserRole = (state) => state.auth.user?.role;
+
 
 export default authSlice.reducer;

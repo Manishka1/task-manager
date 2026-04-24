@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosInstance';
 
-// Fetch all tasks
+// fetch all tasks
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
   async (params, thunkAPI) => {
     try {
-      const response = await axios.get('/tasks', { params });
-      return response.data.tasks;
+      const response = await axiosInstance.get('/tasks', { params });
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -16,13 +16,13 @@ export const fetchTasks = createAsyncThunk(
   }
 );
 
-// Fetch single task
+// fetch single task
 export const fetchTask = createAsyncThunk(
   'tasks/fetchTask',
   async (taskId, thunkAPI) => {
     try {
-      const response = await axios.get(`/tasks/${taskId}`);
-      return response.data; // FIX
+      const response = await axiosInstance.get(`/tasks/${taskId}`);
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -31,13 +31,13 @@ export const fetchTask = createAsyncThunk(
   }
 );
 
-// Create task
+// create task
 export const createTask = createAsyncThunk(
   'tasks/createTask',
   async (taskData, thunkAPI) => {
     try {
-      const response = await axios.post('/tasks', taskData);
-      return response.data; // FIX
+      const response = await axiosInstance.post('/tasks', taskData);
+      return response.data; 
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -46,13 +46,13 @@ export const createTask = createAsyncThunk(
   }
 );
 
-// Update task
+// update task
 export const updateTask = createAsyncThunk(
   'tasks/updateTask',
   async ({ id, data }, thunkAPI) => {
     try {
-      const response = await axios.put(`/tasks/${id}`, data);
-      return response.data; // FIX
+      const response = await axiosInstance.put(`/tasks/${id}`, data);
+      return response.data; 
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -61,12 +61,12 @@ export const updateTask = createAsyncThunk(
   }
 );
 
-// Delete task
+// delete task
 export const deleteTask = createAsyncThunk(
   'tasks/deleteTask',
   async (taskId, thunkAPI) => {
     try {
-      await axios.delete(`/tasks/${taskId}`);
+      await axiosInstance.delete(`/tasks/${taskId}`);
       return taskId;
     } catch (error) {
       return thunkAPI.rejectWithValue(
@@ -81,35 +81,38 @@ const tasksSlice = createSlice({
   initialState: {
     tasks: [],
     task: null,
+    total: 0,
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchTasks.fulfilled, (state, action) => {
-        state.tasks = action.payload;
-      })
+  builder
 
-      .addCase(fetchTask.fulfilled, (state, action) => {
-        state.task = action.payload;
-      })
+    .addCase(fetchTasks.fulfilled, (state, action) => {
+      state.tasks = action.payload.tasks;  
+      state.total = action.payload.total; 
+    })
 
-      .addCase(createTask.fulfilled, (state, action) => {
-        state.tasks.push(action.payload);
-      })
+    .addCase(fetchTask.fulfilled, (state, action) => {
+      state.task = action.payload;
+    })
 
-      .addCase(updateTask.fulfilled, (state, action) => {
-        state.task = action.payload;
-        state.tasks = state.tasks.map((t) =>
-          t._id === action.payload._id ? action.payload : t
-        );
-      })
+    .addCase(createTask.fulfilled, (state, action) => {
+      state.tasks.push(action.payload);
+    })
 
-      .addCase(deleteTask.fulfilled, (state, action) => {
-        state.tasks = state.tasks.filter((t) => t._id !== action.payload);
-      });
-  },
+    .addCase(updateTask.fulfilled, (state, action) => {
+      state.task = action.payload;
+      state.tasks = state.tasks.map((t) =>
+        t._id === action.payload._id ? action.payload : t
+      );
+    })
+
+    .addCase(deleteTask.fulfilled, (state, action) => {
+      state.tasks = state.tasks.filter((t) => t._id !== action.payload);
+    });
+},
 });
 
 export default tasksSlice.reducer;

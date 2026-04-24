@@ -45,11 +45,13 @@ exports.create = [
 ];
 
 exports.findAll = async (req, res, next) => {
+  console.log("ROLE:", req.userRole);
+console.log("TYPE:", typeof req.userRole);
   try {
     const { status, priority, page = 1, size = 10 } = req.query;
     const filter = {};
 
-    if (req.userRole !== 'admin') {
+    if ((req.userRole || "").toLowerCase().trim() !== 'admin'){
       filter.$or = [
         { createdBy: req.userId },
         { assignedTo: req.userId }
@@ -79,7 +81,7 @@ exports.update = async (req, res, next) => {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ message: 'Task not found' });
 
-    // Allow update if user is admin or the task is assigned to them
+    // if admin user hai to update kar sakta, user task nhi update karenga koi bhi
     if (req.userRole !== 'admin' && task.assignedTo.toString() !== req.userId) {
       return res.status(403).json({ message: 'Forbidden' });
     }
@@ -103,7 +105,7 @@ exports.update = async (req, res, next) => {
    try {
      const task = await Task.findById(req.params.id);
      if (!task) return res.status(404).json({ message: 'Task not found' });
-     // Allow deletion if user is admin or the task is assigned to them
+     // admin hi task delete kar sakta
      if (req.userRole !== 'admin' && task.assignedTo.toString() !== req.userId) {
        return res.status(403).json({ message: 'Forbidden' });
      }
@@ -126,7 +128,7 @@ exports.deleteDoc = async (req, res, next) => {
     const doc = await Document.findById(req.params.id);
     if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-    // Allow deletion if user is admin or the document belongs to a task assigned to them
+    // admin hi document delete kar sakta
     const task = await Task.findById(doc.task);
     if (req.userRole !== 'admin' && task.assignedTo.toString() !== req.userId) {
       return res.status(403).json({ message: 'Forbidden' });

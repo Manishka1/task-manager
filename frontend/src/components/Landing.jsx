@@ -8,6 +8,9 @@ import lottie from "lottie-web";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../features/auth/authSlice";
 
 const CDN = "https://cdn.prod.website-files.com/690b5a39d269efd72421ec15";
 
@@ -67,7 +70,7 @@ const FAQS = [
   
 ];
 
-// --- Lottie Loader ---
+// for lottie
 function LottiePlayer({ src, className }) {
   const ref = useRef(null);
 
@@ -94,7 +97,6 @@ function LottiePlayer({ src, className }) {
   );
 }
 
-// --- Scroll Reveal Hook ---
 function useReveal(threshold = 0.15) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -107,7 +109,7 @@ function useReveal(threshold = 0.15) {
   return [ref, visible];
 }
 
-// --- FAQ Item ---
+//FAQ block
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
@@ -143,11 +145,14 @@ function FaqItem({ q, a }) {
   );
 }
 
-// ===================== MAIN COMPONENT =====================
+// main component func
 export default function Landing() {
+  const user = useSelector(state => state.auth.user);
+  const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeCaseIdx, setActiveCaseIdx] = useState(0);
+  
  
 
   useEffect(() => {
@@ -156,7 +161,7 @@ export default function Landing() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lottie web import for feature cards
+
   const [heroRef, heroVisible] = useReveal(0.1);
   const [statsRef, statsVisible] = useReveal(0.15);
   const [howRef, howVisible] = useReveal(0.1);
@@ -167,10 +172,9 @@ export default function Landing() {
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", background: "#0b040d", color: "#fff", overflowX: "hidden" }}>
 
-      {/* ===== GOOGLE FONT ===== */}
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-      {/* ===== HEADER ===== */}
+      
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
         padding: "0 clamp(20px,5vw,80px)",
@@ -207,97 +211,192 @@ export default function Landing() {
         </nav>
 
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-  <Link
-    to="/Register"
-    style={{
-      textDecoration: "none",
-      padding: "0.5px",
-      borderRadius: 999,
-      background: "#ffffff",
-      backdropFilter: "blur(8px)",
-      boxShadow: "0 0 15px rgba(171,0,255,0.25)",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        padding: "10px 20px",
-        borderRadius: 999,
-        background: "linear-gradient(135deg, #020202, #383538)",
-        color: "#dfd3e2",
-        fontSize: 14,
-        fontWeight: 600,
-      }}
-    >
-      Register
-      <span
+
+  {user ? (
+    <>
+     
+      <Link
+        to="/dashboard"
         style={{
-          width: 26,
-          height: 26,
-          borderRadius: "50%",
-          background: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#7f00ff",
-          fontSize: 12,
+          textDecoration: "none",
+          padding: "0.5px",
+          borderRadius: 999,
+          background: "#ffffff",
+          backdropFilter: "blur(8px)",
+          boxShadow: "0 0 15px rgba(171,0,255,0.25)",
         }}
       >
-         → 
-            </span>
-    </div>
-  </Link>
-  <Link
-    to="/login"
-    style={{
-      textDecoration: "none",
-      padding: "0.5px",
-      borderRadius: 999,
-      background: "rgba(10, 0, 0, 0.08)",
-      backdropFilter: "blur(8px)",
-      boxShadow: "0 0 25px rgba(171,0,255,0.25)",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        padding: "10px 20px",
-        borderRadius: 999,
-        background: "#fff",
-        color: "#0b040d",
-        fontSize: 14,
-        fontWeight: 600,
-      }}
-    >
-      Login
-      <span
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "10px 20px",
+            borderRadius: 999,
+            background: "linear-gradient(135deg, #020202, #383538)",
+            color: "#dfd3e2",
+            fontSize: 14,
+            fontWeight: 600,
+          }}
+        >
+          Dashboard
+          <span
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: "50%",
+              background: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#7f00ff",
+              fontSize: 12,
+            }}
+          >
+            →
+          </span>
+        </div>
+      </Link>
+
+      <div
+        onClick={() => dispatch(logout())}
         style={{
-          width: 26,
-          height: 26,
-          borderRadius: "50%",
-          background: "linear-gradient(135deg,#7f00ff,#e100ff)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#fff",
-          fontSize: 12,
+          textDecoration: "none",
+          padding: "0.5px",
+          borderRadius: 999,
+          background: "rgba(10, 0, 0, 0.08)",
+          backdropFilter: "blur(8px)",
+          boxShadow: "0 0 25px rgba(171,0,255,0.25)",
+          cursor: "pointer"
         }}
       >
-        →       
-      </span>
-    </div>
-  </Link>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "10px 20px",
+            borderRadius: 999,
+            background: "#fff",
+            color: "#0b040d",
+            fontSize: 14,
+            fontWeight: 600,
+          }}
+        >
+          Logout
+          <span
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg,#7f00ff,#e100ff)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: 12,
+            }}
+          >
+            →
+          </span>
+        </div>
+      </div>
+    </>
+  ) : (
+    <>
+      <Link
+        to="/register"
+        style={{
+          textDecoration: "none",
+          padding: "0.5px",
+          borderRadius: 999,
+          background: "#ffffff",
+          backdropFilter: "blur(8px)",
+          boxShadow: "0 0 15px rgba(171,0,255,0.25)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "10px 20px",
+            borderRadius: 999,
+            background: "linear-gradient(135deg, #020202, #383538)",
+            color: "#dfd3e2",
+            fontSize: 14,
+            fontWeight: 600,
+          }}
+        >
+          Register
+          <span
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: "50%",
+              background: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#7f00ff",
+              fontSize: 12,
+            }}
+          >
+            →
+          </span>
+        </div>
+      </Link>
+
+      <Link
+        to="/login"
+        style={{
+          textDecoration: "none",
+          padding: "0.5px",
+          borderRadius: 999,
+          background: "rgba(10, 0, 0, 0.08)",
+          backdropFilter: "blur(8px)",
+          boxShadow: "0 0 25px rgba(171,0,255,0.25)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "10px 20px",
+            borderRadius: 999,
+            background: "#fff",
+            color: "#0b040d",
+            fontSize: 14,
+            fontWeight: 600,
+          }}
+        >
+          Login
+          <span
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg,#7f00ff,#e100ff)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: 12,
+            }}
+          >
+            →
+          </span>
+        </div>
+      </Link>
+    </>
+  )}
 
 </div>
       </header>
 
-      {/* ===== HERO ===== */}
       <section style={{ position: "relative", minHeight: "100vh", minWidth: "100%", display: "flex", alignItems: "center", overflow: "hidden" }}>
-        {/* Video Background */}
+        
         <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
           <video
   autoPlay
@@ -310,7 +409,7 @@ export default function Landing() {
     width: "100%",
     height: "100%",
     objectFit: "cover",
-    opacity: 1, // FULL visibility
+    opacity: 1,
     filter: "brightness(0.9) contrast(1.1)"
   }}
 >
@@ -331,7 +430,7 @@ export default function Landing() {
     `,
   }}
 />
-{/* Labels */}
+
           <section
   style={{
     position: "relative",
@@ -350,7 +449,6 @@ export default function Landing() {
     }}
   />
 
-  {/* LEFT CONTENT */}
   <div
     style={{
       position: "relative",
@@ -398,17 +496,17 @@ export default function Landing() {
     </button>
   </div>
 
-  {/* RIGHT MIDDLE BADGES */}
+
   <div
     style={{
       position: "absolute",
-      top: "60%",              // ✅ CHANGED (was bottom)
+      top: "60%",          
       right: "40px",
-      transform: "translateY(-50%)", // ✅ NEW (perfect vertical centering)
+      transform: "translateY(-50%)",
       display: "flex",
       flexWrap: "wrap",
-      gap: 14,                // ✅ INCREASED spacing
-      maxWidth: "360px",      // ✅ slightly bigger container
+      gap: 14,               
+      maxWidth: "360px",     
       justifyContent: "flex-end",
       zIndex: 2,
     }}
@@ -421,19 +519,19 @@ export default function Landing() {
       <span
         key={t}
         style={{
-          padding: "12px 18px",     // ✅ BIGGER
+          padding: "12px 18px",    
           background: "rgba(171,0,255,0.12)",
           border: "1px solid rgba(171,0,255,0.3)",
-          borderRadius: 24,         // ✅ slightly rounder
-          fontSize: 15,             // ✅ BIGGER text
+          borderRadius: 24,        
+          fontSize: 15,             
           color: "#ddbbf1",
           display: "flex",
           alignItems: "center",
-          gap: 8,                   // ✅ more spacing inside
-          backdropFilter: "blur(10px)", // ✅ stronger glass effect
+          gap: 8,                 
+          backdropFilter: "blur(10px)",
         }}
       >
-        <span style={{ color: "#ab00ff", fontSize: 18 }}>✦</span> {/* ✅ BIGGER ICON */}
+        <span style={{ color: "#ab00ff", fontSize: 18 }}>✦</span> 
         {t}
       </span>
     ))}
@@ -466,7 +564,7 @@ export default function Landing() {
             A simple and powerful platform to manage tasks, assign work, and track your team's progress in real-time — all in one place.
           </p>
 
-          <a href="/login" target="_blank" rel="noopener" style={{
+          <Link to="/login" rel="noopener" style={{
             display: "inline-flex", alignItems: "center", gap: 10,
             padding: "14px 28px",
             background: "#fff", color: "#0b040d",
@@ -481,11 +579,11 @@ export default function Landing() {
               background: "#ab00ff", color: "#fff",
               display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
             }}>→</span>
-          </a>
+          </Link>
         </div>
       </section>
 
-      {/* ===== MAIN FEATURES ===== */}
+     
 <section
   id="features"
   style={{
@@ -499,7 +597,7 @@ export default function Landing() {
 >
   <div style={{ maxWidth: 1280, margin: "0 auto" }}>
     
-    {/* Heading */}
+
     <div style={{ textAlign: "center", marginBottom: 56 }}>
       <span
         style={{
@@ -537,7 +635,7 @@ export default function Landing() {
       </p>
     </div>
 
-    {/* Grid */}
+   
     <div
       style={{
         display: "grid",
@@ -553,7 +651,6 @@ export default function Landing() {
 </section>
 
 
-      {/* ===== HOW IT WORKS ===== */}
       <section id="how-it-works" style={{ background: "#0b040d", padding: "100px clamp(20px,6vw,80px)", overflow: "hidden" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ marginBottom: 56 }}>
@@ -571,7 +668,7 @@ export default function Landing() {
             </p>
           </div>
 
-          {/* Horizontal scroll steps */}
+       
           <div style={{ display: "flex", overflowX: "auto", gap: 20, paddingBottom: 24, scrollSnapType: "x mandatory" }}>
             {HOW_STEPS.map((s, i) => (
               <div key={i} ref={i === 0 ? howRef : null} style={{
@@ -597,7 +694,7 @@ export default function Landing() {
               </div>
             ))}
 
-            {/* Final CTA card */}
+        
             <div style={{
               minWidth: 320, flex: "0 0 320px",
               background: "linear-gradient(135deg, rgba(127,0,255,0.25), rgba(225,0,255,0.15))",
@@ -609,22 +706,19 @@ export default function Landing() {
               <h2 style={{ fontSize: "clamp(18px,2.5vw,18px)", fontWeight: 700, color: "#fff", margin: "0 0 24px" }}>
                 Ready to Organize Your Team Better? <span style={{ background: "linear-gradient(90deg,#7f00ff,#e100ff)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Start managing tasks and improving productivity with MiniTeam.</span>
               </h2>
-              <a href="/login" target="_blank" rel="noopener" style={{
+              <Link to="/login" rel="noopener" style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
                 padding: "13px 24px", background: "#fff", color: "#0b040d",
                 fontSize: 14, fontWeight: 600, borderRadius: 8,
                 textDecoration: "none",
               }}>
                 Try it now <span style={{ width: 24, height: 24, borderRadius: "50%", background: "#ab00ff", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}>→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-
-
-      {/* ===== HOME CTA ===== */}
       <section style={{ background: "#0b040d", padding: "80px clamp(20px,6vw,80px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{
@@ -638,14 +732,14 @@ export default function Landing() {
               <h2 style={{ fontSize: "clamp(24px,3.5vw,44px)", fontWeight: 700, color: "#fff", margin: "0 0 28px", lineHeight: 1.2 }}>
                 Stop Losing Time on Disorganized Work. <span style={{ background: "linear-gradient(90deg,#7f00ff,#e100ff)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}> Start Managing Your Team the Right Way.</span>
               </h2>
-              <a href="/login" target="_blank" rel="noopener" style={{
+              <Link to="/login" rel="noopener" style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
                 padding: "13px 24px", background: "#fff", color: "#0b040d",
                 fontSize: 14, fontWeight: 600, borderRadius: 8,
                 textDecoration: "none", width: "fit-content",
               }}>
                 Try it now <span style={{ width: 24, height: 24, borderRadius: "50%", background: "#ab00ff", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}>→</span>
-              </a>
+              </Link>
             </div>
             <div style={{ position: "relative", overflow: "hidden" }}>
               <img
@@ -658,7 +752,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ===== FAQ ===== */}
       <section style={{ background: "#fff", padding: "100px clamp(20px,6vw,80px)" }}>
         <div style={{ maxWidth: 860, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 56 }}>
@@ -679,7 +772,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ===== FINAL CTA ===== */}
       <section id="about" style={{ background: "#0b040d", padding: "120px clamp(20px,6vw,80px)", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{
           position: "absolute", top: "50%", left: "50%",
@@ -697,16 +789,15 @@ export default function Landing() {
             Start managing tasks, assigning work, and tracking progress — all in one place.
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="/login" target="_blank" rel="noopener" style={{
+            <Link to="/login" rel="noopener" style={{
               display: "inline-flex", alignItems: "center", gap: 10,
               padding: "14px 28px", background: "#fff", color: "#0b040d",
               fontSize: 15, fontWeight: 600, borderRadius: 10,
               textDecoration: "none",
             }}>
               Start Now <span style={{ width: 26, height: 26, borderRadius: "50%", background: "#ab00ff", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>→</span>
-            </a>
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=manishka110518@gmail.com"
-  target="_blank" rel="noopener" style={{
+            </Link>
+            <Link to="https://mail.google.com/mail/?view=cm&fs=1&to=manishka110518@gmail.com" target="_blank" rel="noopener" style={{
               display: "inline-flex", alignItems: "center", gap: 10,
               padding: "14px 28px",
               background: "transparent", color: "#fff",
@@ -715,12 +806,11 @@ export default function Landing() {
               border: "1px solid rgba(255,255,255,0.2)",
             }}>
               Contact us <span style={{ width: 26, height: 26, borderRadius: "50%", background: "#ab00ff", color: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13 }}>→</span>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
       <footer style={{ background: "#0b040d", borderTop: "1px solid rgba(255,255,255,0.07)", padding: "48px clamp(20px,6vw,80px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "2fr 2fr", gap: 600, marginBottom: 40 }}>
@@ -750,7 +840,6 @@ export default function Landing() {
   );
 }
 
-// ===== FEATURE CARD SUBCOMPONENT =====
 function FeatureCard({ feature }) {
   const [ref, visible] = useReveal(0.1);
 

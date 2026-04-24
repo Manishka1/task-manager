@@ -3,10 +3,10 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',       // adjust your primary color
+      main: '#1976d2',      
     },
     secondary: {
-      main: '#f50057',       // adjust your accent color
+      main: '#f50057',      
     },
   },
   typography: {
@@ -18,7 +18,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none',  // no uppercase
+          textTransform: 'none', 
           borderRadius: 8,
         },
       },

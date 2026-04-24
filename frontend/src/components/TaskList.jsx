@@ -55,7 +55,7 @@ export default function TaskList() {
       }}
     >
 
-      {/* Filters + Button */}
+     
       <Box
         display="flex"
         justifyContent="space-between"
@@ -138,21 +138,21 @@ export default function TaskList() {
         )}
       </Box>
 
-      {/* Error */}
+     
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
 
-      {/* Loading */}
+     
       {loading ? (
         <Box display="flex" justifyContent="center" p={4}>
           <CircularProgress sx={{ color: "#ab00ff" }} />
         </Box>
       ) : (
         <>
-          {/* Grid */}
+        
           <Grid container spacing={2}>
             {tasks.map(task => (
               <Grid item xs={12} sm={6} md={4} key={task._id}>
@@ -224,7 +224,7 @@ export default function TaskList() {
             ))}
           </Grid>
 
-          {/* Empty */}
+         
           {!loading && tasks.length === 0 && (
             <Box textAlign="center" py={4}>
               <Typography sx={{ color: "rgba(255,255,255,0.6)" }}>
@@ -233,7 +233,7 @@ export default function TaskList() {
             </Box>
           )}
 
-          {/* Pagination */}
+         
           {tasks.length > 0 && (
             <Box mt={4} display="flex" justifyContent="center">
               <Pagination

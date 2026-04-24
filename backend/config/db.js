@@ -3,7 +3,6 @@ require('dotenv').config();
 
 const uri = process.env.MONGO_URI;
 
-// Set the strictQuery option globally
 mongoose.set('strictQuery', true);
 
 mongoose.connect(uri, {

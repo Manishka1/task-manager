@@ -1,11 +1,11 @@
 import axiosInstance from './axiosInstance';
 
-export const fetchTasks  = params    => axios.get('/tasks', { params });
-export const fetchTask   = id        => axios.get(`/tasks/${id}`);
-export const createTask  = data      => axios.post('/tasks', data, {
+export const fetchTasks  = params    => axiosInstance.get('/tasks', { params });
+export const fetchTask   = id        => axiosInstance.get(`/tasks/${id}`);
+export const createTask  = data      => axiosInstance.post('/tasks', data, {
   headers: { 'Content-Type': 'multipart/form-data' }
 });
-export const updateTask  = (id, data) => axios.put(`/tasks/${id}`, data);
-export const deleteTask  = id        => axios.delete(`/tasks/${id}`);
+export const updateTask  = (id, data) => axiosInstance.put(`/tasks/${id}`, data);
+export const deleteTask  = id        => axiosInstance.delete(`/tasks/${id}`);
 export const downloadDoc = filename  =>
-  axios.get(`/tasks/doc/${filename}`, { responseType: 'blob' });
+  axiosInstance.get(`/tasks/doc/${filename}`, { responseType: 'blob' });

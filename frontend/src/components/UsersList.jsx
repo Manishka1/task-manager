@@ -44,7 +44,7 @@ export default function UsersList() {
           borderRadius: "16px"
         }}
       >
-        {/* Title */}
+        
         <Typography
           variant="h6"
           mb={3}
@@ -58,7 +58,7 @@ export default function UsersList() {
           User Management
         </Typography>
 
-        {/* Table */}
+      
         <Table>
           <TableHead>
             <TableRow>
@@ -81,12 +81,12 @@ export default function UsersList() {
                   }
                 }}
               >
-                {/* Email */}
+               
                 <TableCell sx={{ color: "#fff" }}>
                   {u.email}
                 </TableCell>
 
-                {/* Role */}
+               
                 <TableCell>
                   <Chip
                     label={u.role}
@@ -103,7 +103,7 @@ export default function UsersList() {
                   />
                 </TableCell>
 
-                {/* Actions */}
+               
                 <TableCell align="right">
                   <Button
                     onClick={() => dispatch(deleteUser(u._id))}
@@ -124,7 +124,7 @@ export default function UsersList() {
           </TableBody>
         </Table>
 
-        {/* Empty State */}
+       
         {list.length === 0 && (
           <Box textAlign="center" py={4}>
             <Typography sx={{ color: "rgba(255,255,255,0.6)" }}>

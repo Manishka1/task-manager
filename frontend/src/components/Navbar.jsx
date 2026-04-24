@@ -26,54 +26,53 @@ export default function Navbar() {
         borderBottom: "1px solid rgba(43, 4, 48, 0.05)",
       }}
     >
-      {/* LOGO */}
-      <a href="/" style={{ textDecoration: "none" }}>
+      
+      <Link to="/" style={{ textDecoration: "none" }}>
         <img src="/logo.png" alt="MiniTeam" style={{ height: 45 }} />
-      </a>
+      </Link>
 
-      {/* RIGHT SIDE */}
+      
       <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        {user && (
-          <button style={ghostBtn} onClick={() => history.push("/pie-chart")}>
-            Pie Chart
-          </button>
-        )}
-
-        {user?.role === "admin" && (
-          <button style={ghostBtn} onClick={() => history.push("/users")}>
-            Users
-          </button>
-        )}
-
         {user ? (
-          <button style={outlineBtn} onClick={handleLogout}>
-            Logout →
-          </button>
-        ) : (
-          <>
-            {/* REGISTER */}
-            <Link to="/register" style={btnOuter}>
-              <div style={btnInnerDark}>
-                Register
-                <span style={circleLight}>→</span>
-              </div>
-            </Link>
+  <>
+    <button style={ghostBtn} onClick={() => history.push("/dashboard")}>
+      Dashboard
+    </button>
 
-            {/* LOGIN */}
-            <Link to="/login" style={btnOuterLight}>
-              <div style={btnInnerLight}>
-                Login
-                <span style={circlePurple}>→</span>
-              </div>
-            </Link>
-          </>
-        )}
+    <button style={ghostBtn} onClick={() => history.push("/pie-chart")}>
+      Pie Chart
+    </button>
+
+    {user?.role === "admin" && (
+      <button style={ghostBtn} onClick={() => history.push("/users")}>
+        Users
+      </button>
+    )}
+
+    <button style={outlineBtn} onClick={handleLogout}>
+      Logout →
+    </button>
+  </>
+) : (
+  <>
+    <Link to="/register" style={btnOuter}>
+      <div style={btnInnerDark}>
+        Register <span style={circleLight}>→</span>
+      </div>
+    </Link>
+
+    <Link to="/login" style={btnOuterLight}>
+      <div style={btnInnerLight}>
+        Login <span style={circlePurple}>→</span>
+      </div>
+    </Link>
+  </>
+)}
       </div>
     </div>
   );
 }
 
-/* STYLES */
 
 const ghostBtn = {
   background: "transparent",

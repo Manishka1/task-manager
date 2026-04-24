@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['user', 'admin'], default: 'user' }
 });
 
-// Method to compare passwords
 userSchema.methods.comparePassword = function(inputPassword) {
   return bcrypt.compare(inputPassword, this.password);
 };
