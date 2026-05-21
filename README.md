@@ -15,12 +15,10 @@ Backend: https://task-manager-1-hbqs.onrender.com
 ## 📌 Features
 
 * User Authentication
-* Team Creation & Management
-* Real-time Collaboration
+* Tssk Creation & Management
 * Task Assignment
 * Responsive UI
-* Dashboard for Managing Teams
-* Secure Backend APIs
+* Dashboard for Managing Task
 * Modern and Clean Interface
 
 ---
@@ -134,10 +132,6 @@ npm run dev
 
 Users can securely register and log into the platform using authentication-based access control.
 
-### Team Management
-
-Users can create teams, invite members, and manage collaboration workflows.
-
 ### Task Handling
 
 Tasks can be assigned, updated, and tracked efficiently through the dashboard.
@@ -146,9 +140,6 @@ Tasks can be assigned, updated, and tracked efficiently through the dashboard.
 
 The platform is optimized for desktop and mobile devices for better accessibility.
 
-### Backend API Integration
-
-Frontend communicates with backend services through REST APIs for smooth data handling.
 
 ---
 
@@ -181,7 +172,6 @@ The project is deployed using:
 3. Dashboard
 4. Team Management
 5. Task Management
-6. Mobile Responsive View
 
 ---
 
