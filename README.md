@@ -1,87 +1,210 @@
-# Task Manager
+# MiniTeam
 
-A full-stack task management application featuring user authentication with JWT, comprehensive CRUD operations for users and tasks, file uploads, filtering, sorting, and a Dockerized development environment.
-
----
-
-## Built With
-
-- **Backend:** Node.js, Express, MongoDB (Mongoose), JWT, Multer  
-- **Frontend:** React (Create React App), Redux Toolkit, React Router v5, Material-UI  
-- **DevOps:** Docker & Docker Compose  
+MiniTeam is a collaborative web platform designed to simplify team communication, project coordination, and task management in one place.
+The application focuses on providing a smooth and user-friendly experience for managing team workflows efficiently.
 
 ---
 
-## Features
+## 🚀 Live Demo
 
-- User registration & login with hashed passwords and JWT authentication  
-- Role-based authorization (user vs. admin)  
-- CRUD operations for tasks: title, description, status, priority, due date, assignee  
-- File attachments per task (PDFs only, up to 3 files)  
-- List filtering, sorting, and pagination  
-- Admin panel for user management  
-- Real-time development environment using Docker Compose  
+Frontend: https://task-manager-hqzq.vercel.app/
+Backend: https://task-manager-1-hbqs.onrender.com
 
 ---
 
-## Prerequisites
+## 📌 Features
 
-- [Docker](https://www.docker.com/get-started) & [Docker Compose](https://docs.docker.com/compose/install/)  
-- (Optional) Node.js & npm for local development without Docker  
+* User Authentication
+* Team Creation & Management
+* Real-time Collaboration
+* Task Assignment
+* Responsive UI
+* Dashboard for Managing Teams
+* Secure Backend APIs
+* Modern and Clean Interface
 
 ---
 
-## Getting Started
+## 🛠️ Tech Stack
 
-Follow these steps to set up the project on your local machine.
+### Frontend
 
-### 1. Clone the Repository
+* React.js
+* JavaScript
+* CSS / Tailwind / Bootstrap
 
-``bash
-git clone https://github.com/Manishka1/task-manager.git
-cd task-manager
+### Backend
 
-##2. Configure Environment Variables
-Copy the sample .env.example files into each service folder and fill in the required credentials.
+* Node.js
+* Express.js
 
-backend/.env
+### Database
+
+* MongoDB
+
+### Deployment
+
+* Vercel
+* Render
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Manishka1/MiniTeam.git
+```
+
+### 2. Navigate to project directory
+
+```bash
+cd MiniTeam
+```
+
+### 3. Install dependencies
+
+Frontend:
+
+```bash
+cd client
+npm install
+```
+
+Backend:
+
+```bash
+cd server
+npm install
+```
+
+### 4. Configure environment variables
+
+Create a `.env` file inside the server folder.
+
+```env
+MONGO_URI=your_mongodb_connection
+JWT_SECRET=your_secret_key
 PORT=5000
-MONGO_URI=mongodb://mongo:27017/taskmanager
-JWT_SECRET=your_jwt_secret
+```
 
-frontend/.env
-REACT_APP_API_URL=http://backend:5000/api
+### 5. Start the development server
 
-## 3. Run with Docker Compose
-Start the entire stack (MongoDB, backend, frontend) using:
+Frontend:
 
-BASH
-
-docker-compose up --build
-MongoDB: http://localhost:27017
-Backend API: http://localhost:5000/api
-Frontend: http://localhost:3000
-The frontend Create React App development server runs on port 3000 and proxies API calls to the backend container.
-
-## 4. Development Without Docker (Optional)
-If you prefer to run the services locally:
-
-Backend
-BASH
-
-cd backend
-npm install
-npm run dev       # Use `npm start` for production mode
-
-
-Frontend
-BASH
-
-cd frontend
-npm install
+```bash
 npm start
-Ensure the backend is running on http://localhost:5000 so the frontend can reach the API as per REACT_APP_API_URL.
+```
 
-##  Additional Notes
-MongoDB database name: miniTeam
-File uploads restricted to PDFs, max 3 files per task
+Backend:
+
+```bash
+npm run dev
+```
+
+---
+
+## 📷 Screenshots
+
+### Landing Page
+
+<img width="1350" height="595" alt="image" src="https://github.com/user-attachments/assets/d802930a-d73f-4623-94b5-206a975071c6" />
+
+
+### Authentication Page
+
+<img width="1348" height="595" alt="image" src="https://github.com/user-attachments/assets/37d30f6a-e0f7-4bb9-8cb3-3c1a112a1fbf" />
+
+
+### Dashboard
+
+<img width="1346" height="602" alt="image" src="https://github.com/user-attachments/assets/371690c8-8448-4533-8576-88ee0265ef23" />
+
+
+### Task Management
+
+<img width="1346" height="595" alt="image" src="https://github.com/user-attachments/assets/523f202e-5595-4441-8b0a-a0cdb74e9b7d" />
+
+---
+
+## 💡 Functionality Overview
+
+### User Authentication
+
+Users can securely register and log into the platform using authentication-based access control.
+
+### Team Management
+
+Users can create teams, invite members, and manage collaboration workflows.
+
+### Task Handling
+
+Tasks can be assigned, updated, and tracked efficiently through the dashboard.
+
+### Responsive Design
+
+The platform is optimized for desktop and mobile devices for better accessibility.
+
+### Backend API Integration
+
+Frontend communicates with backend services through REST APIs for smooth data handling.
+
+---
+
+## 📂 Project Structure
+
+```bash
+MiniTeam/
+│
+├── client/
+├── server/
+├── screenshots/
+├── README.md
+```
+
+---
+
+## 🌐 Deployment
+
+The project is deployed using:
+
+* Vercel for frontend hosting
+* Render for backend hosting
+
+---
+
+## 📷 Recommended Screenshot Order
+
+1. Landing Page
+2. Authentication Page
+3. Dashboard
+4. Team Management
+5. Task Management
+6. Mobile Responsive View
+
+---
+
+## 👨‍💻 Author
+
+Manishka Singh
+
+GitHub: https://github.com/Manishka1
+LinkedIn: https://www.linkedin.com/in/manishka-singh/
+
+---
+
+## ⭐ Future Improvements
+
+* Real-time notifications
+* Team chat functionality
+* Drag and drop task boards
+* Activity tracking
+* Better analytics dashboard
+
+---
+
+## 📄 License
+
+This project is open-source and available under the MIT License.
+
